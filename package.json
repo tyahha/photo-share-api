@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "scripts": "nodemon -e js,json,graphql",
+    "start": "nodemon -e js,json,graphql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
