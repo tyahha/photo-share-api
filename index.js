@@ -4,11 +4,27 @@ const typeDefs = `
   type Query {
     totalPhotos: Int!
   }
+
+  type Mutation {
+    postPhoto(name: String!, description: String): Boolean!
+  }
 `;
+
+const photos = [];
 
 const resolvers = {
   Query: {
-    totalPhotos: () => 42
+    // 写真を格納した配列の長さを変えs
+    totalPhotos: () => photos.length
+  },
+
+  // postPhotoミューテーションと対応するリゾルバ
+  Mutation: {
+    postPhoto(parent, args) {
+      console.log("paret", parent);
+      photos.push(args);
+      return true;
+    }
   }
 };
 
