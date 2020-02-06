@@ -12,7 +12,7 @@ const typeDefs = readFileSync("./typeDefs.graphql", "UTF-8");
 async function start() {
   const app = express();
 
-  const MONGO_DB = process.env.MONGO_DB;
+  const MONGO_DB = process.env.DB_HOST;
 
   const client = await MongoClient.connect(MONGO_DB, { useNewUrlParser: true });
 

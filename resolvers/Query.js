@@ -2,14 +2,14 @@ const { photos, tags } = require("../data");
 
 module.exports = {
   totalPhotos: (parent, args, { db }) =>
-    db.collection("photos").estimateDocumentCount(),
+    db.collection("photos").estimatedDocumentCount(),
   allPhotos: (parent, args, { db }) =>
     db
       .collection("photos")
       .find()
       .toArray(),
   totalUsers: (parent, args, { db }) =>
-    db.collection("users").estimateDocumentCount(),
+    db.collection("users").estimatedDocumentCount(),
   allUsers: (parent, args, { db }) =>
     db
       .collection("users")
