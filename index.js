@@ -4,25 +4,40 @@ const expressPlayground = require("graphql-playground-middleware-express")
   .default;
 const { readFileSync } = require("fs");
 const resolvers = require("./resolvers");
+const { MongoClient } = require("mongodb");
+require("dotenv").config();
 
 const typeDefs = readFileSync("./typeDefs.graphql", "UTF-8");
 
-const app = express();
+async function start() {
+  const app = express();
 
-// サーバーのインスタンスを作成
-// その際、typeDefs(スキーマ)とリゾルバを引数にとる
-const server = new ApolloServer({
-  typeDefs,
-  resolvers
-});
+  const MONGO_DB = process.env.MONGO_DB;
 
-server.applyMiddleware({ app });
+  const client = await MongoClient.connect(MONGO_DB, { useNewUrlParser: true });
 
-app.get("/", (req, res) => res.end("Welcome to the PhotoShare API"));
-app.get("/playground", expressPlayground({ endpont: "/graphql" }));
+  const db = client.db();
 
-app.listen({ port: 4000 }, () =>
-  console.log(
-    `GraphQL Service running @ http://localhost:4000${server.graphqlPath}`
-  )
-);
+  const context = { db };
+
+  // サーバーのインスタンスを作成
+  // その際、typeDefs(スキーマ)とリゾルバを引数にとる
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context
+  });
+
+  server.applyMiddleware({ app });
+
+  app.get("/", (req, res) => res.end("Welcome to the PhotoShare API"));
+  app.get("/playground", expressPlayground({ endpont: "/graphql" }));
+
+  app.listen({ port: 4000 }, () =>
+    console.log(
+      `GraphQL Service running @ http://localhost:4000${server.graphqlPath}`
+    )
+  );
+}
+
+start();
