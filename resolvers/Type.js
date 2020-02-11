@@ -4,9 +4,10 @@ const { users, photos, tags } = require("../data");
 
 module.exports = {
   Photo: {
-    url: parent => `http://yoursite.com/img/${parent.id}.jpg`,
-    postedBy(parent) {
-      return users.find(u => u.githubLogin === parent.githubUser);
+    id: parent => parent.id || parent._id,
+    url: parent => `/img/${parent._id}.jpg`,
+    postedBy(parent, args, { db }) {
+      return db.collection("users").findOne({ githubLogin: parent.userID });
     },
     taggedUsers(parent) {
       return tags
