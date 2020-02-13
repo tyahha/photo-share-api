@@ -1,4 +1,3 @@
-const { _id, photos } = require("../data");
 const { authorizeWithGithub } = require("../lib");
 const fetch = require("node-fetch");
 

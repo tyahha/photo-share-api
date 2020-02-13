@@ -1,5 +1,3 @@
-const { photos, tags } = require("../data");
-
 module.exports = {
   me: (parent, args, { currentUser }) => currentUser,
   totalPhotos: (parent, args, { db }) =>
