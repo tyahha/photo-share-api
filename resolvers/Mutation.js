@@ -20,7 +20,7 @@ module.exports = {
 
     return newPhoto;
   },
-  async githubAuth(parent, { code }, { db }) {
+  async githubAuth(parent, { code }, { db, pubsub }) {
     const {
       message,
       access_token,
@@ -45,14 +45,17 @@ module.exports = {
     };
 
     const {
-      ops: [user]
+      ops: [user],
+      result
     } = await db
       .collection("users")
       .replaceOne({ githubLogin: login }, latestUserInfo, { upsert: true });
 
+    result.upserted && pubsub.publish("user-added", { newUser: user });
+
     return { user, token: access_token };
   },
-  addFakeUsers: async (root, { count }, { db }) => {
+  addFakeUsers: async (root, { count }, { db, pubsub }) => {
     const randomeUserApi = `https://randomuser.me/api/?results=${count}`;
     const { results } = await fetch(randomeUserApi).then(res => res.json());
 
@@ -64,6 +67,10 @@ module.exports = {
     }));
 
     await db.collection("users").insert(users);
+
+    users.forEach(newUser => {
+      pubsub.publish("user-added", { newUser });
+    });
 
     return users;
   },
