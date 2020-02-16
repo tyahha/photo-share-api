@@ -5,5 +5,11 @@ const Type = require("./Type");
 module.exports = {
   Query,
   Mutation,
+  Subscription: {
+    newPhoto: {
+      subscribe: (parent, args, { pubsub }) =>
+        pubsub.asyncIterator("photo-added")
+    }
+  },
   ...Type
 };
