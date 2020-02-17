@@ -6,12 +6,17 @@ const { readFileSync } = require("fs");
 const resolvers = require("./resolvers");
 const { MongoClient } = require("mongodb");
 const { createServer } = require("http");
+const path = require("path");
 require("dotenv").config();
 
 const typeDefs = readFileSync("./typeDefs.graphql", "UTF-8");
 
 async function start() {
   const app = express();
+  app.use(
+    "/img/photos",
+    express.static(path.join(__dirname, "assets", "photos"))
+  );
   const httpServer = createServer(app);
 
   const MONGO_DB = process.env.DB_HOST;

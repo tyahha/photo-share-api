@@ -28,7 +28,7 @@ const authorizeWithGithub = async credentials => {
   return { ...githubUser, access_token };
 };
 
-const saveFile = (stream, path) =>
+const uploadStream = (stream, path) =>
   new Promise((resolve, reject) => {
     stream
       .on("error", error => {
@@ -41,9 +41,9 @@ const saveFile = (stream, path) =>
       .pipe(fs.createWriteStream(path));
   });
 
-const uploadFile = async (file, path) => {
-  const { stream } = await file;
-  return saveFile(stream, path);
+module.exports = {
+  findBy,
+  authorizeWithGithub,
+  generateFakeUsers,
+  uploadStream
 };
-
-module.exports = { findBy, authorizeWithGithub, generateFakeUsers, uploadFile };

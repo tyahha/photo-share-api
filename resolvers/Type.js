@@ -5,7 +5,7 @@ const { users, photos, tags } = require("../data");
 module.exports = {
   Photo: {
     id: parent => parent.id || parent._id,
-    url: parent => `/img/${parent._id}.jpg`,
+    url: parent => `http://localhost:4000/img/photos/${parent._id}.jpg`,
     postedBy(parent, args, { db }) {
       return db.collection("users").findOne({ githubLogin: parent.userID });
     },
